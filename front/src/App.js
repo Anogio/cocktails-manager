@@ -94,7 +94,7 @@ function App() {
           <Card sx={{ minHeight: 180 }}>
           <CardContent>
           <Typography variant="h5" component="div">
-            {cocktail.name}
+            {cocktail.name} - {cocktail.index}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             { cocktail.family} {cocktail.custom_category ? `- ${cocktail.custom_category}` : ''}
