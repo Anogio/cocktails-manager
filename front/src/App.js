@@ -90,7 +90,7 @@ function App() {
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
           return <Grid item xs={6} sm={3} key={cocktail.index}>
-          <Link to={cocktail.index}>
+          <Link to={cocktail.index.toString()} target="_blank">
           <Card sx={{ minHeight: 180 }}>
           <CardContent>
           <Typography variant="h5" component="div">
