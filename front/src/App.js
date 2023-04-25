@@ -26,7 +26,7 @@ function App() {
   let [searchParams, setSearchParams] = useSearchParams();
 
   async function fetchCocktails() {
-        const baseUrl = process.env.NODE_ENV == "production" ? "https://cocktails-back.vercel.app/cocktails" : "http://127.0.0.1:8000"
+        const baseUrl = process.env.NODE_ENV == "production" ? "https://cocktails-back.vercel.app" : "http://127.0.0.1:8000"
         const resp = await axios.get(`${baseUrl}/cocktails`, 
         { params: { ingredients: filteredIngredients, substitute: substitute},
         paramsSerializer: (params) => {
