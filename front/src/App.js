@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -90,7 +90,7 @@ function App() {
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
           return <Grid item xs={6} sm={3} key={cocktail.index}>
-          <a href={`http://localhost:3000/${cocktail.index}`} target="_blank">
+          <Link to={cocktail.index} target="_blank">
           <Card sx={{ minHeight: 180 }}>
           <CardContent>
           <Typography variant="h5" component="div">
@@ -105,7 +105,7 @@ function App() {
           </div>
           </CardContent>
         </Card>
-        </a>
+        </Link>
         </Grid>
         })
         }
