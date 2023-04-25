@@ -26,7 +26,8 @@ function App() {
   let [searchParams, setSearchParams] = useSearchParams();
 
   async function fetchCocktails() {
-        const resp = await axios.get("http://127.0.0.1:8000/cocktails", 
+        const baseUrl = process.env.NODE_ENV == "production" ? "https://cocktails-back.vercel.app/cocktails" : "http://127.0.0.1:8000"
+        const resp = await axios.get(`${baseUrl}/cocktails`, 
         { params: { ingredients: filteredIngredients, substitute: substitute},
         paramsSerializer: (params) => {
           return stringify(params, {arrayFormat: 'repeat'})
@@ -86,7 +87,6 @@ function App() {
           </Select>
       </header>
       <div>
-        COUCOU {process.env.NODE_ENV}
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
           return <Grid item xs={3} key={cocktail.index}>
