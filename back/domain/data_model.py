@@ -91,7 +91,7 @@ class Dose:
                 "code": self.alcohol.name,
                 "display_name": self.alcohol.value,
             },
-            "quantity":  self.quantity_ounces
+            "quantity": self.quantity_ounces,
         }
 
 
@@ -116,7 +116,9 @@ class Cocktail:
             "addons": self.addons,
             "preparation_recommendation": self.preparation_recommendation,
             "feedback": self.feedback,
-            "custom_category": self.custom_category.value if self.custom_category != CustomCategory.UNKNOWN else None
+            "custom_category": self.custom_category.value
+            if self.custom_category != CustomCategory.UNKNOWN
+            else None,
         }
 
     def __str__(self):

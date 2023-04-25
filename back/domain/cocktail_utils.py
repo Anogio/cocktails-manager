@@ -16,7 +16,9 @@ def cocktail_score(cocktail: Cocktail, ingredients: set[Liquid]) -> float:
     counts = get_cocktail_counts_by_ingredient()
     required_ingredients = set(d.alcohol for d in cocktail.doses)
 
-    required_ingredients_score = sum(1/counts[i] for i in required_ingredients)
-    present_ingredients_score = sum(1/counts[i] for i in ingredients if i in required_ingredients)
+    required_ingredients_score = sum(1 / counts[i] for i in required_ingredients)
+    present_ingredients_score = sum(
+        1 / counts[i] for i in ingredients if i in required_ingredients
+    )
     print(cocktail.name, present_ingredients_score / required_ingredients_score)
     return present_ingredients_score / required_ingredients_score
