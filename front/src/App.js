@@ -89,7 +89,7 @@ function App() {
       <div>
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
-          return <Grid item xs={3} key={cocktail.index}>
+          return <Grid item xs={6} sm={3} key={cocktail.index}>
           <a href={`http://localhost:3000/${cocktail.index}`} target="_blank">
           <Card sx={{ minHeight: 180 }}>
           <CardContent>
