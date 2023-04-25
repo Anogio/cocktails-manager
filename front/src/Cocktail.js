@@ -9,7 +9,8 @@ function Cocktail() {
     const [content, setContent] = useState();
 
     async function fetchCocktails() {
-        const resp = await axios.get(`http://127.0.0.1:8000/cocktails/${id}`)
+      const baseUrl = process.env.NODE_ENV == "production" ? "https://cocktails-back.vercel.app" : "http://127.0.0.1:8000"
+        const resp = await axios.get(`${baseUrl}/cocktails/${id}`)
         console.log(resp)
         setContent(resp.data) 
     }
