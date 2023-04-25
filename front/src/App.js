@@ -90,11 +90,11 @@ function App() {
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
           return <Grid item xs={6} sm={3} key={cocktail.index}>
-          <Link to={cocktail.index} target="_blank">
+          <Link to={cocktail.index}>
           <Card sx={{ minHeight: 180 }}>
           <CardContent>
           <Typography variant="h5" component="div">
-            {cocktail.name} - {cocktail.index}
+            {cocktail.name}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             { cocktail.family} {cocktail.custom_category ? `- ${cocktail.custom_category}` : ''}
