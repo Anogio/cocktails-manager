@@ -22,7 +22,6 @@ function Cocktail() {
       }, [id]);
     
     return <div style={{whiteSpace: "pre-line", margin: '50px'}}>
-      THIS IS A COCKTAIL
         <div dangerouslySetInnerHTML={{__html:content}} />
     </div>
 }
