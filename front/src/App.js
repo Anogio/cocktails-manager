@@ -86,6 +86,7 @@ function App() {
           </Select>
       </header>
       <div>
+        COUCOU {process.env.NODE_ENV}
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
           return <Grid item xs={3} key={cocktail.index}>
