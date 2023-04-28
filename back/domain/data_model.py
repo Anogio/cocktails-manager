@@ -108,7 +108,6 @@ class Cocktail:
 
     def to_json(self):
         return {
-            "COUCOU": "test",
             "name": self.name,
             "doses": [d.to_json() for d in self.doses],
             "family": self.family.value,

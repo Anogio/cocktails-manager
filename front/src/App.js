@@ -19,10 +19,13 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 function App() {
+  const [loaded, setLoaded] = useState(false);
+  const [substituteAtLoad, setSubstituteAtLoad] = useState(false)
   const [cocktails, setCocktails] = useState();
   const [ingredients, setIngredients] = useState();
   const [substitute, setSubstitute] = useState(false);
   const [filteredIngredients, setFilteredIngredients] = useState([]);
+  const [filteredIngredientsWithSubstitution, setFilteredIngredientsWithSubstitution] = useState([]);
   let [searchParams, setSearchParams] = useSearchParams();
 
   async function fetchCocktails() {
@@ -36,35 +39,46 @@ function App() {
         const payload = resp.data;
         setCocktails(payload.cocktails)
         setIngredients(payload.ingredients)
+        setFilteredIngredientsWithSubstitution(payload.ingredients_with_substitution.map(x => x.code))
   }
 
   async function handleSelector(event) {
     setFilteredIngredients(event.target.value)
-    setSearchParams({ingredients: JSON.stringify(event.target.value)});
+    setSearchParams({substitute: JSON.stringify(substitute), ingredients: JSON.stringify(event.target.value)});
   }
 
   async function handleSubstituteSwitch(event) {
     setSubstitute(event.target.checked)
+    setSearchParams({ substitute: JSON.stringify(event.target.checked), ingredients: JSON.stringify(filteredIngredients)});
   }
 
   useEffect(() => {
+    if (searchParams.get("ingredients")) {
+      setFilteredIngredients(JSON.parse(searchParams.get("ingredients")))
+    }
+    if (searchParams.get("substitute")) {
+      const substituteFromUrl = JSON.parse(searchParams.get("substitute"))
+      setSubstitute(substituteFromUrl)
+      setSubstituteAtLoad(substituteFromUrl)
+    }
+    setLoaded(true)
+}, [])
+
+  useEffect(() => {
     async function f() {
+      if (!loaded) {
+        return
+      }
       fetchCocktails()
     }
     f();
-  }, [filteredIngredients, substitute]);
-
-  useEffect(() => {
-      if (searchParams.get("ingredients")) {
-        setFilteredIngredients(JSON.parse(searchParams.get("ingredients")))
-      }
-  }, [])
-
+  }, [filteredIngredients, substitute, loaded]);
   
   return (
+    loaded && 
     <div className="App">
       <header className="App-header">
-        <FormControlLabel control={<Switch value={substitute} onChange={handleSubstituteSwitch}/>} label="Substitution" />
+        <FormControlLabel control={<Switch defaultChecked={substituteAtLoad} value={substitute} onChange={handleSubstituteSwitch}/>} label="Substitution" />
         
         <Select 
           multiple
@@ -100,8 +114,13 @@ function App() {
             { cocktail.family} {cocktail.custom_category ? `- ${cocktail.custom_category}` : ''}
           </Typography>
           <div>
-            {cocktail.doses.map((dose) => <Chip key={dose.liquid.code}
-             color={ filteredIngredients.includes(dose.liquid.code) ? 'primary': undefined} label={dose.liquid.display_name} />)}
+            {cocktail.doses.map((dose) => {
+              const available = filteredIngredients.includes(dose.liquid.code)
+              const availableSubstituted = filteredIngredientsWithSubstitution.includes(dose.liquid.code)
+              const color = available ? "primary" : availableSubstituted ? "warning" : undefined
+              return <Chip key={dose.liquid.code}
+             color={ color } label={dose.liquid.display_name} />
+             })}
           </div>
           </CardContent>
         </Card>
@@ -113,7 +132,7 @@ function App() {
       
       </div>
     </div>
-  );
+);
 }
 
 export default App;
