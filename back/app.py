@@ -14,10 +14,8 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
-    "https://cocktails-manager.vercel.app",
-    "http://cocktails-manager.vercel.app",
     "https://cocktails-manager.anog.fr",
-    "http://cocktails-manager.anog.fr",
+    "https://www.cocktails-manager.anog.fr",
 ]
 
 app.add_middleware(
