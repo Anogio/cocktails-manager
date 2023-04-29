@@ -39,3 +39,11 @@
   min-width: unset !important;
   max-width: 300px !important;
 }
+
+.App-main a {
+  text-decoration: none;
+}
+
+.cocktail-card:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}

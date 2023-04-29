@@ -173,7 +173,7 @@ function App() {
           </div>
         </header>
         {!loading ? (
-          <div style={{marginTop: "12px"}}>
+          <div style={{marginTop: "12px"}} className="App-main">
             <Grid container spacing={2}>
               {cocktails &&
                 cocktails.length &&
@@ -181,7 +181,7 @@ function App() {
                   return (
                     <Grid item xs={6} sm={3} key={cocktail.index}>
                       <Link to={cocktail.index.toString()} target="_blank">
-                        <Card sx={{ minHeight: 180 }}>
+                        <Card sx={{ minHeight: 180 }} className="cocktail-card">
                           <CardContent>
                             <Typography variant="h5" component="div">
                               {cocktail.name}
