@@ -211,6 +211,7 @@ function App() {
                                     key={dose.liquid.code}
                                     color={color}
                                     label={dose.liquid.display_name}
+                                    style={{margin: '2px'}}
                                   />
                                 );
                               })}
