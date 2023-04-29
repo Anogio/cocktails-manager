@@ -113,7 +113,7 @@ function App() {
     loaded && (
       <div className="App">
         {loading}
-        <header className="App-header" style={{ color: "black" }}>
+        <header className="App-header">
           <div style={{ marginBottom: "12px" }}>
             <div>
               <Tooltip title="If checked, allow replacing unavailable ingredients with similar ones (displayed in orange)">
@@ -173,7 +173,7 @@ function App() {
           </div>
         </header>
         {!loading ? (
-          <div>
+          <div style={{marginTop: "12px"}}>
             <Grid container spacing={2}>
               {cocktails &&
                 cocktails.length &&
