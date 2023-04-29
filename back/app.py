@@ -34,8 +34,6 @@ def get_cocktails(
     ingredients: Annotated[Optional[list[str]], Query()] = None,
     substitute: bool = False,
 ):
-    import time
-    time.sleep(3)
     ingredients = [Liquid[s] for s in ingredients] if ingredients is not None else []
     possible_cocktails, ingredients_with_substitution = get_cocktails_for_ingredients(
         available_ingredients=ingredients, susbstitute=substitute

@@ -8,15 +8,15 @@ function Cocktail() {
     const { id } = useParams()
     const [content, setContent] = useState();
 
-    async function fetchCocktails() {
-      const baseUrl = process.env.NODE_ENV == "production" ? "https://cocktails-back.vercel.app" : "http://127.0.0.1:8000"
-        const resp = await axios.get(`${baseUrl}/cocktails/${id}`)
-        console.log(resp)
-        setContent(resp.data) 
-    }
     useEffect(() => {
         async function f() {
-          fetchCocktails()
+          async function fetchCocktail() {
+            const baseUrl = process.env.NODE_ENV === "production" ? "https://cocktails-back.vercel.app" : "http://127.0.0.1:8000"
+              const resp = await axios.get(`${baseUrl}/cocktails/${id}`)
+              console.log(resp)
+              setContent(resp.data) 
+          }
+          fetchCocktail()
         }
         f();
       }, [id]);

@@ -11,36 +11,29 @@ import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import { stringify } from 'qs';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [cocktails, setCocktails] = useState();
   const [ingredients, setIngredients] = useState();
   const [substitute, setSubstitute] = useState(false);
+  const [FilteredIngredientsSelectorValue, setFilteredIngredientsSelectorValue] = useState([]);
   const [filteredIngredients, setFilteredIngredients] = useState([]);
   const [filteredIngredientsWithSubstitution, setFilteredIngredientsWithSubstitution] = useState([]);
   let [searchParams, setSearchParams] = useSearchParams();
 
-  async function fetchCocktails() {
-        const baseUrl = process.env.NODE_ENV == "production" ? "https://cocktails-back.vercel.app" : "http://127.0.0.1:8000"
-        const resp = await axios.get(`${baseUrl}/cocktails`, 
-        { params: { ingredients: filteredIngredients, substitute: substitute},
-        paramsSerializer: (params) => {
-          return stringify(params, {arrayFormat: 'repeat'})
-       },
-      },);
-        const payload = resp.data;
-        setCocktails(payload.cocktails)
-        setIngredients(payload.ingredients)
-        setFilteredIngredientsWithSubstitution(payload.ingredients_with_substitution.map(x => x.code))
+  async function handleSelector(event) {
+    setFilteredIngredientsSelectorValue(event.target.value)
   }
 
-  async function handleSelector(event) {
-    setFilteredIngredients(event.target.value)
-    setSearchParams({substitute: JSON.stringify(substitute), ingredients: JSON.stringify(event.target.value)});
+  async function confirmSelector(event) {
+    setFilteredIngredients(FilteredIngredientsSelectorValue)
+    setSearchParams({substitute: JSON.stringify(substitute), ingredients: JSON.stringify(FilteredIngredientsSelectorValue)});
   }
 
   async function handleSubstituteSwitch(event) {
@@ -50,27 +43,51 @@ function App() {
 
   async function reset() {
     setFilteredIngredients([])
+    setFilteredIngredientsSelectorValue([])
     setSubstitute(false)
     setSearchParams({})
   }
 
   useEffect(() => {
     if (searchParams.get("ingredients")) {
-      setFilteredIngredients(JSON.parse(searchParams.get("ingredients")))
+      const queryParamIngredients = JSON.parse(searchParams.get("ingredients"))
+      setFilteredIngredients(queryParamIngredients)
+      setFilteredIngredientsSelectorValue(queryParamIngredients)
     }
     if (searchParams.get("substitute")) {
       const substituteFromUrl = JSON.parse(searchParams.get("substitute"))
       setSubstitute(substituteFromUrl)
     }
     setLoaded(true)
-}, [])
+}, [searchParams])
 
   useEffect(() => {
     async function f() {
+        async function fetchCocktails() {
+          setCocktails([])
+          setFilteredIngredientsWithSubstitution([])
+          const baseUrl = process.env.NODE_ENV === "production" ? "https://cocktails-back.vercel.app" : "http://127.0.0.1:8000"
+          const resp = await axios.get(`${baseUrl}/cocktails`, 
+          { params: { ingredients: filteredIngredients, substitute: substitute},
+          paramsSerializer: (params) => {
+            return stringify(params, {arrayFormat: 'repeat'})
+        },
+        },);
+        const payload = resp.data;
+        setCocktails(payload.cocktails)
+        setIngredients(payload.ingredients)
+        setFilteredIngredientsWithSubstitution(payload.ingredients_with_substitution.map(x => x.code))
+      }
+
       if (!loaded) {
         return
       }
-      fetchCocktails()
+      setLoading(true)
+      try {
+      await fetchCocktails()
+      } finally {
+        setLoading(false)
+      }
     }
     f();
   }, [filteredIngredients, substitute, loaded]);
@@ -78,6 +95,7 @@ function App() {
   return (
     loaded && ingredients &&
     <div className="App">
+      {loading}
       <header className="App-header" style={{color: "black"}}>
         <div style={{ marginBottom: "12px"}}>
         <div>
@@ -98,8 +116,9 @@ function App() {
             )
             return selectedNames.join(', ');
           }}
-          value={filteredIngredients}
+          value={FilteredIngredientsSelectorValue}
           onChange={handleSelector}
+          onClose={confirmSelector}
           >
             {ingredients && ingredients.map((ingredient) => {
               return <MenuItem key={ingredient.code} value={ingredient.code}>
@@ -112,7 +131,7 @@ function App() {
           </div>
           </div>
       </header>
-      <div>
+      { !loading ? <div>
         <Grid container spacing={2}>
         {cocktails && cocktails.map((cocktail) => {
           return <Grid item xs={6} sm={3} key={cocktail.index}>
@@ -142,7 +161,7 @@ function App() {
         }
         </Grid>
       
-      </div>
+      </div> : <div style={{ marginTop: "30px"}}><CircularProgress/></div>}
     </div>
 );
 }

@@ -510,7 +510,7 @@ cocktails = [
             Dose(Liquid.CHARTREUSE, 1.5),
             Dose(Liquid.LIME_JUICE, 0.75),
         ],
-        addons=["0.5oz Velvet Falernum", "1oz pineapple juice", "Ming sprig"],
+        addons=["0.5oz Velvet Falernum", "1oz pineapple juice", "Mint sprig"],
         method=Method.BUILD,
         family=Family.ORPHANS,
     ),
