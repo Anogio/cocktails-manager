@@ -1,18 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Switch from '@mui/material/Switch';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import FormGroup from '@mui/material/FormGroup';
+import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
@@ -20,7 +17,6 @@ import { stringify } from 'qs';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
-  const [substituteAtLoad, setSubstituteAtLoad] = useState(false)
   const [cocktails, setCocktails] = useState();
   const [ingredients, setIngredients] = useState();
   const [substitute, setSubstitute] = useState(false);
@@ -52,6 +48,12 @@ function App() {
     setSearchParams({ substitute: JSON.stringify(event.target.checked), ingredients: JSON.stringify(filteredIngredients)});
   }
 
+  async function reset() {
+    setFilteredIngredients([])
+    setSubstitute(false)
+    setSearchParams({})
+  }
+
   useEffect(() => {
     if (searchParams.get("ingredients")) {
       setFilteredIngredients(JSON.parse(searchParams.get("ingredients")))
@@ -59,7 +61,6 @@ function App() {
     if (searchParams.get("substitute")) {
       const substituteFromUrl = JSON.parse(searchParams.get("substitute"))
       setSubstitute(substituteFromUrl)
-      setSubstituteAtLoad(substituteFromUrl)
     }
     setLoaded(true)
 }, [])
@@ -75,20 +76,27 @@ function App() {
   }, [filteredIngredients, substitute, loaded]);
   
   return (
-    loaded && 
+    loaded && ingredients &&
     <div className="App">
-      <header className="App-header">
-        <FormControlLabel control={<Switch defaultChecked={substituteAtLoad} value={substitute} onChange={handleSubstituteSwitch}/>} label="Substitution" />
-        
+      <header className="App-header" style={{color: "black"}}>
+        <div style={{ marginBottom: "12px"}}>
+        <div>
+        <Tooltip title="if checked, allow replacing unavailable ingredients with similar ones (displayed in orange)">
+          <FormControlLabel 
+          control={<Switch checked={substitute} onChange={handleSubstituteSwitch}/>} label="Substitution" />
+        </Tooltip>
         <Select 
           multiple
           displayEmpty
           renderValue={(selected) => {
             if (selected.length === 0) {
-              return <p>Ingredients</p>;
+              return <p>Available Ingredients</p>;
             }
-
-            return selected.join(', ');
+            const selectedNames = selected.map((selectedCode) => {
+              return ingredients.filter(x => x.code === selectedCode)[0].display_name
+            }
+            )
+            return selectedNames.join(', ');
           }}
           value={filteredIngredients}
           onChange={handleSelector}
@@ -99,6 +107,10 @@ function App() {
               </MenuItem>
             })}
           </Select>
+          </div><div style={{marginTop: '12px'}}>
+          <Button variant="contained" onClick={reset}>Reset</Button>
+          </div>
+          </div>
       </header>
       <div>
         <Grid container spacing={2}>
