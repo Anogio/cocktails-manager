@@ -19,8 +19,8 @@ import { stringify } from "qs";
 function App() {
   const [loaded, setLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [cocktails, setCocktails] = useState();
-  const [ingredients, setIngredients] = useState();
+  const [cocktails, setCocktails] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
   const [substitute, setSubstitute] = useState(false);
   const [
     FilteredIngredientsSelectorValue,
@@ -110,14 +110,13 @@ function App() {
   }, [filteredIngredients, substitute, loaded]);
 
   return (
-    loaded &&
-    ingredients && (
+    loaded && (
       <div className="App">
         {loading}
         <header className="App-header" style={{ color: "black" }}>
           <div style={{ marginBottom: "12px" }}>
             <div>
-              <Tooltip title="if checked, allow replacing unavailable ingredients with similar ones (displayed in orange)">
+              <Tooltip title="If checked, allow replacing unavailable ingredients with similar ones (displayed in orange)">
                 <FormControlLabel
                   control={
                     <Switch
@@ -132,7 +131,11 @@ function App() {
                 multiple
                 displayEmpty
                 renderValue={(selected) => {
-                  if (selected.length === 0) {
+                  if (
+                    selected.length === 0 ||
+                    !ingredients ||
+                    !ingredients.length
+                  ) {
                     return <p>Available Ingredients</p>;
                   }
                   const selectedNames = selected.map((selectedCode) => {
@@ -146,6 +149,7 @@ function App() {
                 onClose={confirmSelector}
               >
                 {ingredients &&
+                  ingredients.length &&
                   ingredients.map((ingredient) => {
                     return (
                       <MenuItem key={ingredient.code} value={ingredient.code}>
@@ -166,6 +170,7 @@ function App() {
           <div>
             <Grid container spacing={2}>
               {cocktails &&
+                cocktails.length &&
                 cocktails.map((cocktail) => {
                   return (
                     <Grid item xs={6} sm={3} key={cocktail.index}>
