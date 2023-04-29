@@ -136,7 +136,13 @@ function App() {
                     !ingredients ||
                     !ingredients.length
                   ) {
-                    return <p>Available Ingredients</p>;
+                    return (
+                      <p>
+                        {ingredients && ingredients.length
+                          ? "Available Ingredients"
+                          : "Loading ingredients..."}
+                      </p>
+                    );
                   }
                   const selectedNames = selected.map((selectedCode) => {
                     return ingredients.filter((x) => x.code === selectedCode)[0]
