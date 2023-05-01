@@ -17,6 +17,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import axios from "axios";
 import { stringify } from "qs";
+import Cocktail from "./Cocktail";
 
 function App() {
   const baseUrl =
@@ -205,7 +206,7 @@ function App() {
                               </span>
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                              {cocktail.family}
+                              {cocktail.family} {cocktail.shaken && " (Shaken)"}
                             </Typography>
                             <div>
                               {cocktail.doses.map((dose) => {

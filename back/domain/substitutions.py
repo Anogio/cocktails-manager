@@ -2,7 +2,7 @@ from domain.entitites import Liquid
 
 INGREDIENT_SETS = [
     (Liquid.GIN, Liquid.VODKA),
-    (Liquid.RUM, Liquid.CACHACA),
+    (Liquid.RUM_DARK, Liquid.RUM_LIGHT, Liquid.CACHACA),
     (Liquid.CHARTREUSE, Liquid.ABSINTHE, Liquid.BENEDICTINE, Liquid.GENTIANE),
     (Liquid.BRANDY, Liquid.CHERRY_BRANDY, Liquid.CALVADOS),
     (Liquid.JAGERMEISTER,),
@@ -25,11 +25,20 @@ INGREDIENT_SETS = [
         Liquid.CREME_DE_VIOLETTE,
         Liquid.GINGERBREAD_SYRUP,
     ),
+    (Liquid.CREME_DE_CASSIS,),
     (Liquid.ANCHO_VERDE,),
     (Liquid.MARASCHINO,),
     (Liquid.SHERRY,),
     (Liquid.KAHLUA,),
     (Liquid.TOMATO_JUICE,),
+    (Liquid.COCONUT_CREAM,),
+    (
+        Liquid.APPLE_JUICE,
+        Liquid.ORANGE_JUICE,
+        Liquid.GRAPEFRUIT_JUICE,
+        Liquid.PINEAPPLE_JUICE,
+        Liquid.CRANBERRY_JUICE,
+    ),
 ]
 
 all_ingredients: list[Liquid] = list(Liquid)

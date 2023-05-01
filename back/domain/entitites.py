@@ -7,7 +7,8 @@ from typing import Optional
 
 class Liquid(Enum):
     GIN = "Gin"
-    RUM = "Rum"
+    RUM_DARK = "Dark rum"
+    RUM_LIGHT = "Light rum"
     VODKA = "Vodka"
     CHARTREUSE = "Chartreuse"
     BRANDY = "Brandy"
@@ -36,7 +37,8 @@ class Liquid(Enum):
     ANCHO_VERDE = "Ancho Verde Liqueur"
     MARASCHINO = "Maraschino"
     SHERRY = "Sherry"  # = Xeres
-    CREME_DE_VIOLETTE = "Crème de Violette"
+    CREME_DE_VIOLETTE = "Crème de violette"
+    CREME_DE_CASSIS = "Crème de cassis"
     AMARO = "Amaro"  # C'est du bitter, substituable Picon, Aperol, Campari
     GRAND_MARNIER = "Grand Marnier"
     GENTIANE = "Gentiane"
@@ -46,6 +48,12 @@ class Liquid(Enum):
     KAHLUA = "Kahlua"
     CHERRY_BRANDY = "Cherry brandy"
     TOMATO_JUICE = "Tomato juice"
+    APPLE_JUICE = "Apple juice"
+    ORANGE_JUICE = "Orange juice"
+    GRAPEFRUIT_JUICE = "Grapefruit juice"
+    PINEAPPLE_JUICE = "Pineapple juice"
+    CRANBERRY_JUICE = "Cranberry juice"
+    COCONUT_CREAM = "Coconut cream"
     CACHACA = "Cachaça"
     CALVADOS = "Calvados"
     LILLET_BLONDE = "Lillet blonde"
@@ -55,6 +63,7 @@ class Method(Enum):
     STIR = "Stir and strain"
     SHAKE = "Shake and strain"
     BUILD = "Build"
+    BLEND = "Blend"
 
 
 class Family(Enum):
@@ -72,6 +81,7 @@ class Family(Enum):
     CHAMPAGNE_COCKTAILS = "Champagne cocktail"
     PUNCHES = "Punch"
     TIKI = "Tiki"
+    FROZEN_DRINKS = "Frozen drink"
 
 
 class FavoriteStatus(Enum):
@@ -114,23 +124,10 @@ class Cocktail:
             "doses": [d.to_json() for d in self.doses],
             "family": self.family.value,
             "method": self.method.value,
+            "shaken": self.method
+            == Method.SHAKE,  # TODO: use codified enum values and drop this prop
             "addons": self.addons,
             "preparation_recommendation": self.preparation_recommendation,
             "feedback": self.feedback,
             "favorite_status": self.favorite_status.name,
         }
-
-    def __str__(self):
-        # TODO: drop this and do it in frontend
-        ingredients = "\n".join(
-            [f"    {dose.alcohol.value}: {dose.quantity_ounces}" for dose in self.doses]
-        )
-        return f"""
-<h3><b>{self.name}</b> ({self.family.value}) {(' - ' + self.favorite_status.value) if self.favorite_status != FavoriteStatus.NONE else ''}</h3>
-<b>Ingredients</b>:
-{ingredients}
-    {", ".join(self.addons) if self.addons is not None else ""}
-
-<b>Preparation</b>: {self.method.value}. {self.preparation_recommendation}
-{ "<b>Feedback</b>: " + self.feedback if self.feedback else ""}
-"""

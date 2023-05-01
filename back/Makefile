@@ -8,10 +8,14 @@ migrate:
 	alembic upgrade head
 
 migrate_prod:
-	ENVIRONMENT=production env $(cat db_secrets_prod | xargs) alembic upgrade head
+	ENVIRONMENT=production alembic upgrade head
 
 seed:
 	python -m db.seed.cocktails_seed
+
+seed_prod:
+	ENVIRONMENT=production python -m db.seed.cocktails_seed
+
 
 format:
 	black . && isort .
