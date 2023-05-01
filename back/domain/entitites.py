@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
+# TODO: stop using enum names everywhere in the API, add translations in the front
+
 
 class Liquid(Enum):
     GIN = "Gin"

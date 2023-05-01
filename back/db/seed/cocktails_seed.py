@@ -4,8 +4,6 @@ from db.db_connector import DbConnector
 from domain.entitites import (Cocktail, Dose, Family, FavoriteStatus, Liquid,
                               Method)
 
-# TODO: make sure nothing imports this
-
 cocktails_seed = [
     Cocktail(
         cocktail_id=0,
@@ -66,7 +64,7 @@ cocktails_seed = [
             Dose(Liquid.SWEET_VERMOUTH, 0.5),
             Dose(Liquid.MARASCHINO, 0.5),
             Dose(Liquid.ORANGE_BITTERS, 0),
-            Dose(Liquid.CHAMPAGNE, None),
+            Dose(Liquid.CHAMPAGNE, 0),
         ],
         addons=["1 flamed orange twist"],
         method=Method.STIR,
@@ -102,7 +100,7 @@ cocktails_seed = [
             Dose(Liquid.WHISKEY, 1),
             Dose(Liquid.SHERRY, 1),
             Dose(Liquid.LEMON_JUICE, 0.5),
-            Dose(Liquid.GINGER_ALE, None),
+            Dose(Liquid.GINGER_ALE, 0),
         ],
         addons=[
             "1 ounce apple juice",
@@ -242,7 +240,7 @@ cocktails_seed = [
             Dose(Liquid.BRANDY, 2),
             Dose(Liquid.DRY_VERMOUTH, 1),
             Dose(Liquid.TRIPLE_SEC, 0.5),
-            Dose(Liquid.ANGOSTURA_BITTERS, None),
+            Dose(Liquid.ANGOSTURA_BITTERS, 0),
         ],
         addons=["Lemon twist"],
         method=Method.STIR,
@@ -289,7 +287,7 @@ cocktails_seed = [
         doses=[
             Dose(Liquid.VODKA, 2),
             Dose(Liquid.TOMATO_JUICE, 2),
-            Dose(Liquid.LEMON_JUICE, None),
+            Dose(Liquid.LEMON_JUICE, 0),
         ],
         addons=[
             "2oz Beef bouillon",
@@ -311,7 +309,7 @@ cocktails_seed = [
         doses=[
             Dose(Liquid.VODKA, 2),
             Dose(Liquid.TOMATO_JUICE, 2),
-            Dose(Liquid.LEMON_JUICE, None),
+            Dose(Liquid.LEMON_JUICE, 0),
         ],
         addons=[
             "2oz clam juice",
@@ -332,7 +330,7 @@ cocktails_seed = [
         doses=[
             Dose(Liquid.VODKA, 2),
             Dose(Liquid.TOMATO_JUICE, 4),
-            Dose(Liquid.LEMON_JUICE, None),
+            Dose(Liquid.LEMON_JUICE, 0),
         ],
         addons=[
             "Salt",
@@ -485,7 +483,7 @@ cocktails_seed = [
     Cocktail(
         cocktail_id=0,
         name="Caïpirinha",
-        doses=[Dose(Liquid.CACHACA, 3), Dose(Liquid.LIME_JUICE, None)],
+        doses=[Dose(Liquid.CACHACA, 3), Dose(Liquid.LIME_JUICE, 0)],
         addons=["1tbsp granulated sugar"],
         preparation_recommendation="Muddle the limes and sugar in glass, add ice and cachaça",
         method=Method.BUILD,
@@ -494,7 +492,7 @@ cocktails_seed = [
     Cocktail(
         cocktail_id=0,
         name="Caïpiroska",
-        doses=[Dose(Liquid.VODKA, 3), Dose(Liquid.LIME_JUICE, None)],
+        doses=[Dose(Liquid.VODKA, 3), Dose(Liquid.LIME_JUICE, 0)],
         preparation_recommendation="Muddle the limes and sugar in glass, add ice and vodka",
         method=Method.BUILD,
         family=Family.SIMPLE_SOURS,
@@ -542,7 +540,7 @@ cocktails_seed = [
     Cocktail(
         cocktail_id=0,
         name="Champagne Cocktail",
-        doses=[Dose(Liquid.CHAMPAGNE, 5.5), Dose(Liquid.ANGOSTURA_BITTERS, None)],
+        doses=[Dose(Liquid.CHAMPAGNE, 5.5), Dose(Liquid.ANGOSTURA_BITTERS, 0)],
         addons=["Sugar cube soaked in Angostura", "Lemon twist"],
         method=Method.BUILD,
         family=Family.CHAMPAGNE_COCKTAILS,
@@ -696,7 +694,7 @@ cocktails_seed = [
         doses=[
             Dose(Liquid.VODKA, 2),
             Dose(Liquid.WHISKEY, 0.5),
-            Dose(Liquid.PASTIS, None),
+            Dose(Liquid.PASTIS, 0),
         ],
         addons=["lemon twist"],
         preparation_recommendation="Use smoky scotch",
@@ -747,7 +745,7 @@ cocktails_seed = [
         cocktail_id=0,
         name="Fish house punch",
         doses=[
-            Dose(Liquid.RUM, None),
+            Dose(Liquid.RUM, 0),
             Dose(Liquid.BRANDY, 13),
             Dose(Liquid.SIMPLE_SYRUP, 4),
             Dose(Liquid.LEMON_JUICE, 5),
@@ -806,8 +804,13 @@ if __name__ == "__main__":
         try:
             new_id = db_connector.create_cocktail(cocktail)
         except IntegrityError as e:
-            print(f"Cocktail {cocktail.name} already exists")
-            continue
+            if (
+                'duplicate key value violates unique constraint "cocktails_name_key'
+                in str(e.orig)
+            ):
+                print(f"Cocktail {cocktail.name} already exists")
+                continue
+            raise
         if cocktail.favorite_status != FavoriteStatus.NONE:
             db_connector.set_cocktail_favorite_status(new_id, cocktail.favorite_status)
         if cocktail.feedback:

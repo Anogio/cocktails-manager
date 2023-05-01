@@ -14,13 +14,16 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
 import MenuItem from "@mui/material/MenuItem";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import axios from "axios";
 import { stringify } from "qs";
 
 function App() {
+  const baseUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://cocktails-back.vercel.app"
+      : "http://127.0.0.1:8000";
+
   const [loaded, setLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cocktails, setCocktails] = useState([]);
@@ -83,10 +86,6 @@ function App() {
       async function fetchCocktails() {
         setCocktails([]);
         setFilteredIngredientsWithSubstitution([]);
-        const baseUrl =
-          process.env.NODE_ENV === "production"
-            ? "https://cocktails-back.vercel.app"
-            : "http://127.0.0.1:8000";
         const resp = await axios.get(`${baseUrl}/cocktails`, {
           params: { ingredients: filteredIngredients, substitute: substitute },
           paramsSerializer: (params) => {
@@ -112,7 +111,7 @@ function App() {
       }
     }
     f();
-  }, [filteredIngredients, substitute, loaded]);
+  }, [filteredIngredients, substitute, loaded, baseUrl]);
 
   return (
     loaded && (
@@ -192,27 +191,16 @@ function App() {
                               <span style={{ cursor: "pointer" }}>
                                 {cocktail.name}
                               </span>
-                              <span style={{ color: "red", marginLeft: "4px" }}>
+                              <span style={{ marginLeft: "4px" }}>
                                 {cocktail.favorite_status === "FAVORITE" ? (
-                                  <FavoriteIcon />
-                                ) : (
-                                  <FavoriteBorderOutlinedIcon
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                )}
-                              </span>
-                              <span
-                                style={{ color: "green", marginLeft: "4px" }}
-                              >
-                                {cocktail.favorite_status === "FAVORITE" ? (
-                                  <></>
+                                  <FavoriteIcon style={{ color: "red" }} />
                                 ) : cocktail.favorite_status ===
                                   "BOOKMARKED" ? (
-                                  <BookmarkOutlinedIcon />
-                                ) : (
-                                  <BookmarkAddOutlinedIcon
-                                    style={{ cursor: "pointer" }}
+                                  <BookmarkOutlinedIcon
+                                    style={{ color: "green" }}
                                   />
+                                ) : (
+                                  <></>
                                 )}
                               </span>
                             </Typography>

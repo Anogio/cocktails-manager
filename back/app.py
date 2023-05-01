@@ -2,9 +2,10 @@ from typing import Annotated, Optional
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from db.db_connector import DbConnector
-from domain.entitites import Liquid
+from domain.entitites import FavoriteStatus, Liquid
 from domain.interface import get_cocktails_for_ingredients
 
 app = FastAPI()
@@ -55,4 +56,27 @@ def get_cocktails(
 
 @app.get("/cocktails/{index}")
 def get_cocktail(index: int):
-    return str(DbConnector().get_cocktail_by_id(index))
+    return DbConnector().get_cocktail_by_id(index).to_json()
+
+
+class UserDataInput(BaseModel):
+    feedback: Optional[str] = None
+    favorite_status: Optional[str] = None
+
+
+@app.patch("/cocktails/{index}")
+def update_cocktail_user_data(index: int, user_data: UserDataInput):
+    """
+    For now, only
+    """
+    if user_data.feedback is not None:
+        DbConnector().set_cocktail_feedback(
+            cocktail_id=index, feedback=user_data.feedback
+        )
+
+    if user_data.favorite_status is not None:
+        DbConnector().set_cocktail_favorite_status(
+            cocktail_id=index, favorite_status=FavoriteStatus[user_data.favorite_status]
+        )
+
+    return DbConnector().get_cocktail_by_id(cocktail_id=index).to_json()
