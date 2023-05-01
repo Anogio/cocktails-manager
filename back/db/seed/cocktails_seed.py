@@ -1,14 +1,21 @@
-from domain.data_model import Cocktail, Dose, Method, Family, Liquid, CustomCategory
+from sqlalchemy.exc import IntegrityError
 
+from db.db_connector import DbConnector
+from domain.entitites import (Cocktail, Dose, Family, FavoriteStatus, Liquid,
+                              Method)
 
-cocktails = [
+# TODO: make sure nothing imports this
+
+cocktails_seed = [
     Cocktail(
+        cocktail_id=0,
         name="Alaska",
         doses=[Dose(Liquid.GIN, 1.5), Dose(Liquid.CHARTREUSE, 0.5)],
         method=Method.STIR,
         family=Family.DUOS_TRIOS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Alexander",
         doses=[Dose(Liquid.GIN, 2), Dose(Liquid.CREME_DE_CACAO, 1)],
         addons=["1 ounce cream"],
@@ -16,6 +23,7 @@ cocktails = [
         family=Family.DUOS_TRIOS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Almost blow my skull off",
         doses=[
             Dose(Liquid.ANCHO_VERDE, 0.25),
@@ -27,6 +35,7 @@ cocktails = [
         preparation_recommendation="Use Cognac specifically for the Brandy",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Amaro Crusta",
         doses=[
             Dose(Liquid.LEMON_JUICE, 0.5),
@@ -39,17 +48,18 @@ cocktails = [
         preparation_recommendation="I simplified a lot. Actual recipe with a mix of Amaros "
         "(Montenegro, Picon, Rabarbaro)."
         "Dry shake marmalade and citrus juice, then add ice and shake the rest",
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Americano",
         doses=[Dose(Liquid.CAMPARI, 1.5), Dose(Liquid.SWEET_VERMOUTH, 1.5)],
         addons=["2 ounces club Soda", "1 orange twist"],
         method=Method.BUILD,
         family=Family.HIGHBALLS,
-        custom_category=CustomCategory.CLASSIC,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Am I Blue",
         doses=[
             Dose(Liquid.WHISKEY, 1.5),
@@ -61,10 +71,11 @@ cocktails = [
         addons=["1 flamed orange twist"],
         method=Method.STIR,
         family=Family.FRENCH_ITALIAN,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
         preparation_recommendation="Use Blue Label Johnny Walker Scotch",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Angel's Share",
         doses=[
             Dose(Liquid.CHARTREUSE, 1),
@@ -74,17 +85,18 @@ cocktails = [
         ],
         method=Method.STIR,
         family=Family.ORPHANS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Aperol Spritz",
         doses=[Dose(Liquid.APEROL, 2), Dose(Liquid.PROSECCO, 3)],
         addons=["1 Splash Club soda", "1 Orange Wheel"],
         method=Method.BUILD,
         family=Family.ORPHANS,
-        custom_category=CustomCategory.CLASSIC,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Atom Limo",
         doses=[
             Dose(Liquid.WHISKEY, 1),
@@ -101,9 +113,10 @@ cocktails = [
         ],
         method=Method.BUILD,
         family=Family.ORPHANS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Autumn Winds",
         doses=[
             Dose(Liquid.GIN, 2),
@@ -115,6 +128,7 @@ cocktails = [
         family=Family.ORPHANS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Aviation Cocktail",
         doses=[
             Dose(Liquid.GIN, 2),
@@ -124,9 +138,10 @@ cocktails = [
         ],
         method=Method.SHAKE,
         family=Family.INTERNATIONAL_SOURS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Aztec's Mark",
         doses=[
             Dose(Liquid.WHISKEY, 1.25),
@@ -139,6 +154,7 @@ cocktails = [
         preparation_recommendation="Use Maker's Mark Bourbon",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bacardi Cocktail",
         doses=[Dose(Liquid.RUM, 1.5), Dose(Liquid.LIME_JUICE, 0.5)],
         addons=["0.75oz Grenadine"],
@@ -146,6 +162,7 @@ cocktails = [
         family=Family.SIMPLE_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bedford",
         doses=[
             Dose(Liquid.WHISKEY, 2),
@@ -158,6 +175,7 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bellini",
         doses=[Dose(Liquid.PROSECCO, 3.5)],
         addons=[
@@ -165,10 +183,11 @@ cocktails = [
         ],
         method=Method.BUILD,
         preparation_recommendation="Add the purée in a flute, then the prosecco while stirring",
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
         family=Family.SPARKLING_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bensonhurst",
         doses=[
             Dose(Liquid.WHISKEY, 2),
@@ -180,6 +199,7 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Betsy Ross",
         doses=[
             Dose(Liquid.BRANDY, 1.5),
@@ -191,6 +211,7 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bitter Stripper",
         doses=[
             Dose(Liquid.GIN, 1.5),
@@ -203,6 +224,7 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Black cat",
         doses=[
             Dose(Liquid.GIN, 1.5),
@@ -214,6 +236,7 @@ cocktails = [
         family=Family.ORPHANS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Black Feather",
         doses=[
             Dose(Liquid.BRANDY, 2),
@@ -224,17 +247,17 @@ cocktails = [
         addons=["Lemon twist"],
         method=Method.STIR,
         family=Family.FRENCH_ITALIAN,
-        custom_category=CustomCategory.TRIED_NOT_FAVORITE,
         feedback="Try again with less dilution",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Black Russian",
         doses=[Dose(Liquid.VODKA, 2), Dose(Liquid.KAHLUA, 1)],
         family=Family.DUOS_TRIOS,
         method=Method.STIR,
-        custom_category=CustomCategory.CLASSIC,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Blackthorn",
         doses=[
             Dose(Liquid.WHISKEY, 2),
@@ -245,9 +268,10 @@ cocktails = [
         addons=["Lemon twist"],
         method=Method.STIR,
         family=Family.FRENCH_ITALIAN,
-        custom_category=CustomCategory.FAVORITE,
+        favorite_status=FavoriteStatus.FAVORITE,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Blood and Sand",
         doses=[
             Dose(Liquid.WHISKEY, 0.75),
@@ -260,6 +284,7 @@ cocktails = [
         preparation_recommendation="Serve at brunch",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bloody Bull",
         doses=[
             Dose(Liquid.VODKA, 2),
@@ -278,9 +303,10 @@ cocktails = [
         ],
         method=Method.SHAKE,
         family=Family.SNAPPERS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bloody Caesar",
         doses=[
             Dose(Liquid.VODKA, 2),
@@ -301,6 +327,7 @@ cocktails = [
         method=Method.SHAKE,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bloody Mary",
         doses=[
             Dose(Liquid.VODKA, 2),
@@ -320,6 +347,7 @@ cocktails = [
         method=Method.SHAKE,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bobby Burns",
         doses=[
             Dose(Liquid.WHISKEY, 2),
@@ -329,9 +357,10 @@ cocktails = [
         addons=["Lemon twist"],
         family=Family.FRENCH_ITALIAN,
         method=Method.STIR,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bottom line",
         doses=[
             Dose(Liquid.WHISKEY, 1.5),
@@ -345,6 +374,7 @@ cocktails = [
         method=Method.STIR,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Brandy Alexander",
         doses=[Dose(Liquid.BRANDY, 2), Dose(Liquid.CREME_DE_CACAO, 1)],
         addons=["1oz cream", "nutmeg"],
@@ -352,6 +382,7 @@ cocktails = [
         method=Method.SHAKE,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Brandy Crusta",
         doses=[
             Dose(Liquid.BRANDY, 2),
@@ -365,6 +396,7 @@ cocktails = [
         method=Method.SHAKE,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Breakfast Martini",
         doses=[
             Dose(Liquid.GIN, 1.75),
@@ -374,9 +406,10 @@ cocktails = [
         addons=["1.5 teaspoon orange marmalade", "Shredded orange peel"],
         method=Method.SHAKE,
         family=Family.INTERNATIONAL_SOURS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Bronx cocktail",
         doses=[
             Dose(Liquid.GIN, 2),
@@ -390,6 +423,7 @@ cocktails = [
         feedback="Seems nice for brunch",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Brooklyn Heights",
         doses=[
             Dose(Liquid.CAMPARI, 0.5),
@@ -402,9 +436,10 @@ cocktails = [
         preparation_recommendation="Rinse the glass with the Campari before pouring the rest",
         method=Method.STIR,
         family=Family.FRENCH_ITALIAN,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Butter Lemon Smoke",
         doses=[
             Dose(Liquid.WHISKEY, 1.5),
@@ -418,6 +453,7 @@ cocktails = [
         preparation_recommendation="Use very smoky Whisky",
     ),
     Cocktail(
+        cocktail_id=0,
         name="Cable Car",
         doses=[
             Dose(Liquid.RUM, 1.5),
@@ -426,12 +462,13 @@ cocktails = [
             Dose(Liquid.SIMPLE_SYRUP, 0.5),
         ],
         addons=["Cinnamon and sugar (rim glass with)", "Orange twist"],
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
         preparation_recommendation="Use spiced Captain Morgan rum",
         method=Method.SHAKE,
         family=Family.NEW_ORLEANS_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Café Brulôt",
         doses=[Dose(Liquid.TRIPLE_SEC, 1), Dose(Liquid.BRANDY, 1)],
         addons=[
@@ -446,6 +483,7 @@ cocktails = [
         family=Family.HOT_DRINKS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Caïpirinha",
         doses=[Dose(Liquid.CACHACA, 3), Dose(Liquid.LIME_JUICE, None)],
         addons=["1tbsp granulated sugar"],
@@ -454,6 +492,7 @@ cocktails = [
         family=Family.SIMPLE_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Caïpiroska",
         doses=[Dose(Liquid.VODKA, 3), Dose(Liquid.LIME_JUICE, None)],
         preparation_recommendation="Muddle the limes and sugar in glass, add ice and vodka",
@@ -461,6 +500,7 @@ cocktails = [
         family=Family.SIMPLE_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Calvados cocktail",
         doses=[
             Dose(Liquid.CALVADOS, 1.5),
@@ -472,6 +512,7 @@ cocktails = [
         family=Family.NEW_ORLEANS_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Caricature cocktail",
         doses=[
             Dose(Liquid.GIN, 1.5),
@@ -482,9 +523,10 @@ cocktails = [
         addons=["0.5oz Grapefruit juice", "Orange twist"],
         method=Method.SHAKE,
         family=Family.NEW_ORLEANS_SOURS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Casanova Cobbler",
         doses=[
             Dose(Liquid.LEMON_JUICE, 0.5),
@@ -498,6 +540,7 @@ cocktails = [
         family=Family.ORPHANS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Champagne Cocktail",
         doses=[Dose(Liquid.CHAMPAGNE, 5.5), Dose(Liquid.ANGOSTURA_BITTERS, None)],
         addons=["Sugar cube soaked in Angostura", "Lemon twist"],
@@ -505,6 +548,7 @@ cocktails = [
         family=Family.CHAMPAGNE_COCKTAILS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Chartreuse Swizzle",
         doses=[
             Dose(Liquid.CHARTREUSE, 1.5),
@@ -515,6 +559,7 @@ cocktails = [
         family=Family.ORPHANS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Clover club",
         doses=[
             Dose(Liquid.GIN, 1.5),
@@ -525,9 +570,10 @@ cocktails = [
         method=Method.SHAKE,
         preparation_recommendation="DRY SHAKE to foam then shake with ice normally",
         family=Family.ENHANCED_SOURS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Compass box",
         doses=[
             Dose(Liquid.WHISKEY, 1),
@@ -540,6 +586,7 @@ cocktails = [
         family=Family.ORPHANS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Corpse reviver N°1",
         doses=[
             Dose(
@@ -551,9 +598,10 @@ cocktails = [
         ],
         method=Method.STIR,
         family=Family.FRENCH_ITALIAN,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Corpse reviver N°2",
         doses=[
             Dose(Liquid.GIN, 0.75),
@@ -566,6 +614,7 @@ cocktails = [
         family=Family.NEW_ORLEANS_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Cosmopolitan",
         doses=[
             Dose(Liquid.VODKA, 1.5),
@@ -574,11 +623,12 @@ cocktails = [
         ],
         addons=["1oz cranberry juice"],
         feedback="Seems good for mom or people who like sweeter cocktails",
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
         method=Method.SHAKE,
         family=Family.NEW_ORLEANS_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Cuzco cocktail",
         doses=[
             Dose(Liquid.BRANDY, 2),
@@ -591,6 +641,7 @@ cocktails = [
         family=Family.INTERNATIONAL_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Daiquiri",
         doses=[
             Dose(Liquid.RUM, 2),
@@ -601,6 +652,7 @@ cocktails = [
         family=Family.SIMPLE_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Dark and stormy",
         doses=[Dose(Liquid.RUM, 2), Dose(Liquid.GINGER_BEER, 3)],
         addons=["Lime wedge"],
@@ -608,6 +660,7 @@ cocktails = [
         family=Family.HIGHBALLS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Dirty martini",
         doses=[Dose(Liquid.GIN, 2.5), Dose(Liquid.DRY_VERMOUTH, 1.5)],
         addons=["Olive brine to taste", "1 olive"],
@@ -615,15 +668,17 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Dog's nose",
         doses=[Dose(Liquid.BEER, 12), Dose(Liquid.GIN, 2)],
         addons=["2tsp brown sugar", "Nutmeg"],
         family=Family.ORPHANS,
         method=Method.BUILD,
         preparation_recommendation="Use porter or stout, heat it in the microwave then add the rest and stir",
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="The Dubliner",
         doses=[
             Dose(Liquid.WHISKEY, 2),
@@ -636,6 +691,7 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Dreamy Dorini smoking martini",
         doses=[
             Dose(Liquid.VODKA, 2),
@@ -644,11 +700,12 @@ cocktails = [
         ],
         addons=["lemon twist"],
         preparation_recommendation="Use smoky scotch",
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
         family=Family.ORPHANS,
         method=Method.STIR,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Earl grey marteani",
         doses=[
             Dose(Liquid.GIN, 1.75),
@@ -657,11 +714,12 @@ cocktails = [
         ],
         addons=["1 egg white", "lemon twist"],
         preparation_recommendation="Infuse the gin first, by letting it sit in a bowl with earl grey tea for 2h",
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
         family=Family.SIMPLE_SOURS,
         method=Method.SHAKE,
     ),
     Cocktail(
+        cocktail_id=0,
         name="El Presidente",
         doses=[
             Dose(Liquid.RUM, 1.5),
@@ -674,6 +732,7 @@ cocktails = [
         family=Family.FRENCH_ITALIAN,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Final Ward",
         doses=[
             Dose(Liquid.WHISKEY, 0.75),
@@ -685,6 +744,7 @@ cocktails = [
         family=Family.INTERNATIONAL_SOURS,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Fish house punch",
         doses=[
             Dose(Liquid.RUM, None),
@@ -699,6 +759,7 @@ cocktails = [
         family=Family.PUNCHES,
     ),
     Cocktail(
+        cocktail_id=0,
         name="Fog cutter",
         doses=[
             Dose(Liquid.RUM, 2),
@@ -711,9 +772,10 @@ cocktails = [
         method=Method.SHAKE,
         preparation_recommendation="Float the sherry at the end",
         family=Family.TIKI,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
     Cocktail(
+        cocktail_id=0,
         name="French 75",
         doses=[
             Dose(Liquid.SIMPLE_SYRUP, 0.5),
@@ -723,7 +785,7 @@ cocktails = [
         ],
         method=Method.BUILD,
         family=Family.SPARKLING_SOURS,
-        custom_category=CustomCategory.WANT_TO_TRY,
+        favorite_status=FavoriteStatus.BOOKMARKED,
     ),
 ]
 
@@ -736,3 +798,18 @@ cocktails = [
 # "Dutch Coupe" (uses Jenever, Cynar, orange flower water)
 # "Flame of love"
 # "Floss 75"
+
+if __name__ == "__main__":
+    db_connector = DbConnector()
+
+    for cocktail in cocktails_seed:
+        try:
+            new_id = db_connector.create_cocktail(cocktail)
+        except IntegrityError as e:
+            print(f"Cocktail {cocktail.name} already exists")
+            continue
+        if cocktail.favorite_status != FavoriteStatus.NONE:
+            db_connector.set_cocktail_favorite_status(new_id, cocktail.favorite_status)
+        if cocktail.feedback:
+            db_connector.set_cocktail_feedback(new_id, cocktail.feedback)
+        print(f"Cocktail {cocktail.name} created")

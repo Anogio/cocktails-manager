@@ -1,13 +1,11 @@
-from fastapi import FastAPI, Query
-from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated, Optional
 
-from domain.data_model import Liquid
-from domain.interface import (
-    get_cocktails_for_ingredients,
-    get_cocktail_counts_by_ingredient,
-)
-from domain.cocktails import cocktails
+from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+from db.db_connector import DbConnector
+from domain.entitites import Liquid
+from domain.interface import get_cocktails_for_ingredients
 
 app = FastAPI()
 
@@ -32,23 +30,29 @@ def get_cocktails(
     ingredients: Annotated[Optional[list[str]], Query()] = None,
     substitute: bool = False,
 ):
-    ingredients = [Liquid[s] for s in ingredients] if ingredients is not None else []
-    possible_cocktails, ingredients_with_substitution = get_cocktails_for_ingredients(
-        available_ingredients=ingredients, susbstitute=substitute
+    available_ingredients = (
+        [Liquid[s] for s in ingredients] if ingredients is not None else []
     )
-    counts = sorted(
-        get_cocktail_counts_by_ingredient().items(), key=lambda x: (-x[1], x[0].value)
+    (
+        possible_cocktails,
+        ingredients_with_substitution,
+        counts,
+    ) = get_cocktails_for_ingredients(
+        available_ingredients=available_ingredients, susbstitute=substitute
     )
+    counts = sorted(counts.items(), key=lambda x: (-x[1], x[0].value))
     return {
-        "cocktails": [{**c.to_json(), "index": i} for c, i in possible_cocktails],
+        "cocktails": [c.to_json() for c in possible_cocktails],
         "ingredients": [
             {"display_name": ingredient.value, "code": ingredient.name, "count": count}
             for ingredient, count in counts
         ],
-        "ingredients_with_substitution": [{"code": ingredient.name} for ingredient in ingredients_with_substitution]
+        "ingredients_with_substitution": [
+            {"code": ingredient.name} for ingredient in ingredients_with_substitution
+        ],
     }
 
 
 @app.get("/cocktails/{index}")
 def get_cocktail(index: int):
-    return str(cocktails[index])
+    return str(DbConnector().get_cocktail_by_id(index))

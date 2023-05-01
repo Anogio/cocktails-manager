@@ -1,4 +1,4 @@
-from domain.data_model import Liquid
+from domain.entitites import Liquid
 
 INGREDIENT_SETS = [
     (Liquid.GIN, Liquid.VODKA),

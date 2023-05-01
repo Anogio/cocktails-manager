@@ -72,12 +72,10 @@ class Family(Enum):
     TIKI = "Tiki"
 
 
-class CustomCategory(Enum):
-    UNKNOWN = "Unknown"
-    WANT_TO_TRY = "Want to try"
+class FavoriteStatus(Enum):
+    NONE = "None"
+    BOOKMARKED = "Want to try"
     FAVORITE = "Favorite"
-    TRIED_NOT_FAVORITE = "Tried"
-    CLASSIC = "Classic"
 
 
 @dataclass
@@ -97,17 +95,19 @@ class Dose:
 
 @dataclass
 class Cocktail:
+    cocktail_id: int
     name: str
     doses: list[Dose]
     family: Family
     method: Optional[Method]
     addons: Optional[list[str]] = None
     preparation_recommendation: str = ""
-    feedback: str = ""
-    custom_category: CustomCategory = CustomCategory.UNKNOWN
+    feedback: Optional[str] = ""
+    favorite_status: FavoriteStatus = FavoriteStatus.NONE
 
     def to_json(self):
         return {
+            "id": self.cocktail_id,
             "name": self.name,
             "doses": [d.to_json() for d in self.doses],
             "family": self.family.value,
@@ -115,17 +115,16 @@ class Cocktail:
             "addons": self.addons,
             "preparation_recommendation": self.preparation_recommendation,
             "feedback": self.feedback,
-            "custom_category": self.custom_category.value
-            if self.custom_category != CustomCategory.UNKNOWN
-            else None,
+            "favorite_status": self.favorite_status.name,
         }
 
     def __str__(self):
+        # TODO: drop this and do it in frontend
         ingredients = "\n".join(
             [f"    {dose.alcohol.value}: {dose.quantity_ounces}" for dose in self.doses]
         )
         return f"""
-<h3><b>{self.name}</b> ({self.family.value}) {(' - ' + self.custom_category.value) if self.custom_category != CustomCategory.UNKNOWN else ''}</h3>
+<h3><b>{self.name}</b> ({self.family.value}) {(' - ' + self.favorite_status.value) if self.favorite_status != FavoriteStatus.NONE else ''}</h3>
 <b>Ingredients</b>:
 {ingredients}
     {", ".join(self.addons) if self.addons is not None else ""}

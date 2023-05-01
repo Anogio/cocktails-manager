@@ -13,6 +13,10 @@ import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
 import MenuItem from "@mui/material/MenuItem";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
+import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import axios from "axios";
 import { stringify } from "qs";
 
@@ -55,6 +59,7 @@ function App() {
 
   async function reset() {
     setFilteredIngredients([]);
+    setFilteredIngredientsWithSubstitution([]);
     setFilteredIngredientsSelectorValue([]);
     setSubstitute(false);
     setSearchParams({});
@@ -173,24 +178,46 @@ function App() {
           </div>
         </header>
         {!loading ? (
-          <div style={{marginTop: "12px"}} className="App-main">
+          <div style={{ marginTop: "12px" }} className="App-main">
             <Grid container spacing={2}>
               {cocktails &&
                 cocktails.length &&
                 cocktails.map((cocktail) => {
                   return (
-                    <Grid item xs={6} sm={3} key={cocktail.index}>
-                      <Link to={cocktail.index.toString()} target="_blank">
+                    <Grid item xs={6} sm={3} key={cocktail.id}>
+                      <Link to={cocktail.id.toString()} target="_blank">
                         <Card sx={{ minHeight: 180 }} className="cocktail-card">
                           <CardContent>
                             <Typography variant="h5" component="div">
-                              {cocktail.name}
+                              <span style={{ cursor: "pointer" }}>
+                                {cocktail.name}
+                              </span>
+                              <span style={{ color: "red", marginLeft: "4px" }}>
+                                {cocktail.favorite_status === "FAVORITE" ? (
+                                  <FavoriteIcon />
+                                ) : (
+                                  <FavoriteBorderOutlinedIcon
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                )}
+                              </span>
+                              <span
+                                style={{ color: "green", marginLeft: "4px" }}
+                              >
+                                {cocktail.favorite_status === "FAVORITE" ? (
+                                  <></>
+                                ) : cocktail.favorite_status ===
+                                  "BOOKMARKED" ? (
+                                  <BookmarkOutlinedIcon />
+                                ) : (
+                                  <BookmarkAddOutlinedIcon
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                )}
+                              </span>
                             </Typography>
                             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                              {cocktail.family}{" "}
-                              {cocktail.custom_category
-                                ? `- ${cocktail.custom_category}`
-                                : ""}
+                              {cocktail.family}
                             </Typography>
                             <div>
                               {cocktail.doses.map((dose) => {
@@ -211,7 +238,7 @@ function App() {
                                     key={dose.liquid.code}
                                     color={color}
                                     label={dose.liquid.display_name}
-                                    style={{margin: '2px'}}
+                                    style={{ margin: "2px" }}
                                   />
                                 );
                               })}
