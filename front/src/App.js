@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, createSearchParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -17,7 +17,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import axios from "axios";
 import { stringify } from "qs";
-import Cocktail from "./Cocktail";
 
 function App() {
   const baseUrl =
@@ -119,7 +118,7 @@ function App() {
       <div className="App">
         {loading}
         <header className="App-header">
-          <div style={{ marginBottom: "12px" }}>
+          <div style={{ paddingBottom: "12px", paddingTop: "12px" }}>
             <div>
               <Tooltip title="If checked, allow replacing unavailable ingredients with similar ones (displayed in orange)">
                 <FormControlLabel
@@ -185,7 +184,11 @@ function App() {
                 cocktails.map((cocktail) => {
                   return (
                     <Grid item xs={6} sm={3} key={cocktail.id}>
-                      <Link to={cocktail.id.toString()} target="_blank">
+                      <Link
+                        to={`${cocktail.id.toString()}?${createSearchParams(
+                          searchParams
+                        )}`}
+                      >
                         <Card sx={{ minHeight: 180 }} className="cocktail-card">
                           <CardContent>
                             <Typography variant="h5" component="div">
@@ -194,11 +197,19 @@ function App() {
                               </span>
                               <span style={{ marginLeft: "4px" }}>
                                 {cocktail.favorite_status === "FAVORITE" ? (
-                                  <FavoriteIcon style={{ color: "red" }} />
+                                  <FavoriteIcon
+                                    style={{
+                                      color: "red",
+                                      verticalAlign: "text-bottom",
+                                    }}
+                                  />
                                 ) : cocktail.favorite_status ===
                                   "BOOKMARKED" ? (
                                   <BookmarkOutlinedIcon
-                                    style={{ color: "green" }}
+                                    style={{
+                                      color: "green",
+                                      verticalAlign: "text-bottom",
+                                    }}
                                   />
                                 ) : (
                                   <></>

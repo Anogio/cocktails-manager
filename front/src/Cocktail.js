@@ -3,7 +3,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
+import Button from "@mui/material/Button";
 
+import { useSearchParams, Link, createSearchParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +13,7 @@ import axios from "axios";
 function Cocktail() {
   const { id } = useParams();
   const [cocktail, setCocktail] = useState();
+  let [searchParams] = useSearchParams();
 
   const baseUrl =
     process.env.NODE_ENV === "production"
@@ -37,7 +40,14 @@ function Cocktail() {
 
   return (
     cocktail && (
-      <div style={{ whiteSpace: "pre-line", margin: "50px" }}>
+      <div style={{ margin: "50px" }}>
+        <div>
+          <Link to={`/?${createSearchParams(searchParams)}`}>
+            <Button variant="outlined" style={{ marginBottom: "8px" }}>
+              Back
+            </Button>
+          </Link>
+        </div>
         <Typography variant="h4" component="div">
           {cocktail.name}
           <span style={{ color: "red", cursor: "pointer", marginLeft: "4px" }}>
