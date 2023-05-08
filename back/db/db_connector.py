@@ -1,14 +1,13 @@
 from collections import defaultdict
 from typing import Optional
 
-from sqlalchemy import create_engine, func
-from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.orm import sessionmaker
-
 from config import DB_DATABASE, DB_HOST, DB_PASSWORD, DB_PORT, DB_USER
 from db.models import Cocktail, CocktailDose, CocktailUserData
 from domain.entitites import Cocktail as DomainCocktail
 from domain.entitites import Dose, Family, FavoriteStatus, Liquid, Method
+from sqlalchemy import create_engine, func
+from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.orm import sessionmaker
 
 CONNECTION_STRING = (
     f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}"

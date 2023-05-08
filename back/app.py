@@ -1,12 +1,11 @@
 from typing import Annotated, Optional
 
-from fastapi import FastAPI, Query
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-
 from db.db_connector import DbConnector
 from domain.entitites import FavoriteStatus, Liquid
 from domain.interface import get_cocktails_for_ingredients
+from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI()
 

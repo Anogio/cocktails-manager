@@ -1,8 +1,6 @@
-from sqlalchemy.exc import IntegrityError
-
 from db.db_connector import DbConnector
-from domain.entitites import (Cocktail, Dose, Family, FavoriteStatus, Liquid,
-                              Method)
+from domain.entitites import Cocktail, Dose, Family, FavoriteStatus, Liquid, Method
+from sqlalchemy.exc import IntegrityError
 
 cocktails_seed = [
     Cocktail(
@@ -856,7 +854,7 @@ cocktails_seed = [
         addons=["1oz 'half and half (half milk, half cream)", "nutmeg"],
         family=Family.DUOS_TRIOS,
         method=Method.SHAKE,
-        cocktail_id=0
+        cocktail_id=0,
     ),
     Cocktail(
         cocktail_id=0,
@@ -866,11 +864,15 @@ cocktails_seed = [
             Dose(Liquid.CREME_DE_CACAO, 1.5),
             Dose(Liquid.FERNET_BRANCA, 0.5),
         ],
-        addons=["1oz 'half and half (half milk, half cream)",
-                "pinch of salt", "4oz vanilla ice cream", "8oz crushed ice",
-                "Mint sprig for garnish"],
+        addons=[
+            "1oz 'half and half (half milk, half cream)",
+            "pinch of salt",
+            "4oz vanilla ice cream",
+            "8oz crushed ice",
+            "Mint sprig for garnish",
+        ],
         method=Method.BLEND,
-        family=Family.ORPHANS
+        family=Family.ORPHANS,
     ),
     Cocktail(
         cocktail_id=0,
@@ -880,23 +882,34 @@ cocktails_seed = [
             Dose(Liquid.CHARTREUSE, 0.5),
             Dose(Liquid.SWEET_VERMOUTH, 0.5),
             Dose(Liquid.ANGOSTURA_BITTERS, 1),
-            Dose(Liquid.ORANGE_BITTERS, 1)
+            Dose(Liquid.ORANGE_BITTERS, 1),
         ],
         addons=["Lemon twist"],
-        method=Method.STIR, family=Family.FRENCH_ITALIAN
+        method=Method.STIR,
+        family=Family.FRENCH_ITALIAN,
     ),
-    Cocktail(cocktail_id=0, name="Greyhound", doses=[
-        Dose(Liquid.GRAPEFRUIT_JUICE, 3), Dose(Liquid.VODKA, 2),
-    ], method=Method.BUILD, family=Family.HIGHBALLS),
+    Cocktail(
+        cocktail_id=0,
+        name="Greyhound",
+        doses=[
+            Dose(Liquid.GRAPEFRUIT_JUICE, 3),
+            Dose(Liquid.VODKA, 2),
+        ],
+        method=Method.BUILD,
+        family=Family.HIGHBALLS,
+    ),
     Cocktail(
         cocktail_id=0,
         name="Hanky panky",
         doses=[
-            Dose(Liquid.GIN, 1.5), Dose(Liquid.SWEET_VERMOUTH, 1.5), Dose(Liquid.FERNET_BRANCA, 0.5)
+            Dose(Liquid.GIN, 1.5),
+            Dose(Liquid.SWEET_VERMOUTH, 1.5),
+            Dose(Liquid.FERNET_BRANCA, 0.5),
         ],
-        addons=["Orange twist"], method=Method.STIR, family=Family.FRENCH_ITALIAN
+        addons=["Orange twist"],
+        method=Method.STIR,
+        family=Family.FRENCH_ITALIAN,
     ),
-    
 ]
 
 # Not transcribed
