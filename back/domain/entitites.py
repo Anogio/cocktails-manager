@@ -39,7 +39,9 @@ class Liquid(Enum):
     SHERRY = "Sherry"  # = Xeres
     CREME_DE_VIOLETTE = "Crème de violette"
     CREME_DE_CASSIS = "Crème de cassis"
+    CREME_DE_MENTHE = "Crème de menthe"
     AMARO = "Amaro"  # C'est du bitter, substituable Picon, Aperol, Campari
+    FERNET_BRANCA = "Fernet Branca"
     GRAND_MARNIER = "Grand Marnier"
     GENTIANE = "Gentiane"
     ABSINTHE = "Absinthe"
