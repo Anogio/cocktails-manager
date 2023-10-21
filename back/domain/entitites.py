@@ -12,6 +12,8 @@ class Liquid(Enum):
     VODKA = "Vodka"
     CHARTREUSE = "Chartreuse"
     BRANDY = "Brandy"
+    TEQUILA = "Tequila"
+    PISCO = "Pisco"
     JAGERMEISTER = "Jägermeister"
     CAMPARI = "Campari"
     SWEET_VERMOUTH = "Sweet Vermouth"
@@ -32,6 +34,7 @@ class Liquid(Enum):
     BEER = "Beer"
     SIMPLE_SYRUP = "Simple Syrup"
     CREME_DE_CACAO = "Crème de Cacao"
+    BAILEYS = "Baileys"
     WALNUT_LIQUEUR = "Walnut Liqueur"
     HONEY_LIQUEUR = "Honey Liqueur"
     ANCHO_VERDE = "Ancho Verde Liqueur"
@@ -47,13 +50,18 @@ class Liquid(Enum):
     ABSINTHE = "Absinthe"
     BENEDICTINE = "Bénédictine"
     GINGERBREAD_SYRUP = "Gingerbread Syrup"
+    CINNAMON_SYRUP = "Cinnamon syrup"
+    ORGEAT_SYRUP = "Orgeat syrup"
+    GRENADINE = "Grenadine"
     KAHLUA = "Kahlua"
     CHERRY_BRANDY = "Cherry brandy"
     TOMATO_JUICE = "Tomato juice"
+    WORCESTERSHIRE_SAUCE = "Worcestershire sauce"
     APPLE_JUICE = "Apple juice"
     ORANGE_JUICE = "Orange juice"
     GRAPEFRUIT_JUICE = "Grapefruit juice"
     PINEAPPLE_JUICE = "Pineapple juice"
+    PASSIONFRUIT_JUICE = "Passionfruit juice"
     CRANBERRY_JUICE = "Cranberry juice"
     COCONUT_CREAM = "Coconut cream"
     CACHACA = "Cachaça"
@@ -66,6 +74,7 @@ class Method(Enum):
     SHAKE = "Shake and strain"
     BUILD = "Build"
     BLEND = "Blend"
+    MUDDLE = "Muddle"
 
 
 class Family(Enum):
@@ -84,6 +93,7 @@ class Family(Enum):
     PUNCHES = "Punch"
     TIKI = "Tiki"
     FROZEN_DRINKS = "Frozen drink"
+    JULEPS = "Juleps"
 
 
 class FavoriteStatus(Enum):
